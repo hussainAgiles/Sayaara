@@ -14,9 +14,10 @@ import Colors from '../Constants/Colors';
 import { RadioButton } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import Header from '../Components/Header/Header';
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const Create = () => {
 
+const QuickQuote = () => {
   const [checked, setChecked] = React.useState('first');
   const salutation = [
     {
@@ -84,6 +85,10 @@ const Create = () => {
   const [phone, setPhone] = useState(0);
   const [description, setDescription] = useState('');
   const [selectedValue, setSelectedValue] = useState('Individual');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [date, setDate] = useState('');
+
 
 
   const handleSelect = (selecetedOption: any) => {
@@ -101,131 +106,43 @@ const Create = () => {
     return null;
   };
 
-  
+  const handleDateConfirm = (newdate: Date) => {
+    setSelectedDate(newdate);
+    setDatePickerVisibility(false);
+
+    // Format the date as YYYY-MM-DD
+    const date = newdate.toISOString().split('T')[0];
+    setDate(date);
+  };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Header text="Create Lead" />
+      <Header text="Quick Quote" />
       <View
         style={{
           backgroundColor: Colors.Iconwhite,
-          height: '100%',
+          height: '80%',
+          borderWidth: 0.7,
           padding: 20
         }}>
-        <View>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Enter Lead Details</Text>
-        </View>
-        <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            data={salutation}
-            maxHeight={100}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Mr' : '...'}
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <TextInput
-            placeholder="First Name"
-            placeholderTextColor={Colors.black}
-            value={firstName}
-            onChangeText={text => setFirstname(text)}
-            style={[styles.input, { width: '80%' }]}
-          />
-        </View>
-        <View style={{ width: '100%', paddingVertical: 15 }}>
-          <TextInput
-            placeholder="Last Name"
-            placeholderTextColor={Colors.black}
-            value={lastName}
-            onChangeText={text => setLastname(text)}
-            style={{
-              borderWidth: 0.5,
-              borderRadius: 25,
-              padding: Platform.OS === 'ios' ? 8 : 6,
-              height: 50,
-            }}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            data={countryCode}
-            maxHeight={100}
-            labelField="code"
-            valueField="code"
-            placeholder={!isFocus ? '+91' : '...'}
-            value={code}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.code);
-              setIsFocus(false);
-            }}
 
-          />
-          <TextInput
-            placeholder="Mobile"
-            placeholderTextColor={Colors.black}
-            value={mobile}
-            onChangeText={text => setMobile(text)}
-            style={[styles.input, { width: '80%' }]}
-          />
+        <View style={{ borderWidth: 0.5, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+          <Image source={require('../Assets/Images/Car.jpg')} style={{ height: 70, width: 100 }} />
+          <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Toyota Innova Hycross (8 Seater)</Text>
+              <Text style={{ fontSize: 14 }}>2.7L Limited Edition</Text>
+              <Text style={{ fontSize: 12 }}> Quantity :02</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 7 }}>
+              <Text>QAR 99,000</Text>
+              <Text>Quote Sent</Text>
+            </View>
+          </View>
         </View>
-        <View style={{ width: '100%', paddingVertical: 15 }}>
-          <TextInput
-            placeholder="Phone"
-            placeholderTextColor={Colors.black}
-            value={phone}
-            onChangeText={text => setPhone(text)}
-            style={{
-              borderWidth: 0.5,
-              borderRadius: 25,
-              padding: Platform.OS === 'ios' ? 8 : 6,
-              height: 50,
-            }}
-          />
-        </View>
-        <View style={{ width: '100%' }}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={Colors.black}
-            value={email}
-            onChangeText={text => setEmail(text)}
-            style={{
-              borderWidth: 0.5,
-              borderRadius: 25,
-              padding: Platform.OS === 'ios' ? 8 : 6,
-              height: 50,
-            }}
-          />
-        </View>
-        <View style={{ width: '100%', paddingVertical: 15 }}>
-          <TextInput
-            placeholder="Additional Information"
-            placeholderTextColor={Colors.black}
-            value={description}
-            onChangeText={text => setDescription(text)}
-            style={{
-              borderWidth: 0.5,
-              borderRadius: 25,
-              padding: Platform.OS === 'ios' ? 8 : 6,
-              height: 100,
-            }}
-            multiline
-          />
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 15 }}>
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}
             onPress={() => handleSelect('Individual')}
@@ -284,7 +201,119 @@ const Create = () => {
             <Text style={{ marginLeft: 10 }}>Company</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ width: '30%', backgroundColor: Colors.primary, alignItems: 'center', borderRadius: 30, paddingVertical: 15, alignSelf: 'center', marginTop: 20 }}>
+        <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            data={salutation}
+            maxHeight={100}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Mr' : '...'}
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+          <TextInput
+            placeholder="First Name"
+            placeholderTextColor={Colors.black}
+            value={firstName}
+            onChangeText={text => setFirstname(text)}
+            style={[styles.input, { width: '80%' }]}
+          />
+        </View>
+        <View style={{ width: '100%', paddingVertical: 15 }}>
+          <TextInput
+            placeholder="Last Name"
+            placeholderTextColor={Colors.black}
+            value={lastName}
+            onChangeText={text => setLastname(text)}
+            style={{
+              borderWidth: 0.5,
+              borderRadius: 25,
+              padding: Platform.OS === 'ios' ? 8 : 6,
+              height: 50,
+            }}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            data={countryCode}
+            maxHeight={100}
+            labelField="code"
+            valueField="code"
+            placeholder={!isFocus ? 'Mr' : '...'}
+            value={code}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.code);
+              setIsFocus(false);
+            }}
+
+          />
+          <TextInput
+            placeholder="Mobile"
+            placeholderTextColor={Colors.black}
+            value={mobile}
+            onChangeText={text => setMobile(text)}
+            style={[styles.input, { width: '80%' }]}
+          />
+        </View>
+
+        {/* <View>
+          <TouchableOpacity
+            style={[
+              styles.input,
+              {
+                borderWidth: 0.5,
+                borderRadius: 3,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 15,
+              },
+            ]}
+            onPress={() => setDatePickerVisibility(true)}>
+            <Text style={{ color: Colors.black }}>
+              {selectedDate ? selectedDate.toDateString() : 'Select Date'}
+            </Text>
+            <Icon name="calendar" size={20} color={Colors.black} />
+          </TouchableOpacity>
+        </View> */}
+
+        <View style={{ width: '100%' }}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor={Colors.black}
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={{
+              borderWidth: 0.5,
+              borderRadius: 25,
+              padding: Platform.OS === 'ios' ? 8 : 6,
+              height: 50,
+            }}
+          />
+        </View>
+
+        {/* <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleDateConfirm}
+        onCancel={() => setDatePickerVisibility(false)}
+        // minimumDate={new Date()}
+      /> */}
+
+        <View style={{ width: '30%', backgroundColor: Colors.primary, alignItems: 'center', borderRadius: 30, paddingVertical: 15, alignSelf: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ color: Colors.Iconwhite, fontSize: 18 }}>
               + Create
@@ -296,12 +325,12 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default QuickQuote;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primary,
+    // backgroundColor: Colors.primary,
   },
   label: {
     position: 'absolute',

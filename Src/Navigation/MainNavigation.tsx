@@ -10,6 +10,7 @@ import Calendar from '../Screen/Calendar';
 import Stock from '../Screen/Stock';
 import { View } from 'react-native';
 import Create from '../Screen/Create';
+import QuickQuote from '../Screen/Quotes';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,7 +52,7 @@ const MainNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Create"
-        component={Create}
+        component={QuickQuote}
         options={{
           tabBarIcon: () => (
             <View style={{marginBottom:60,height:50,width:50,borderRadius:25,backgroundColor:Colors.primary,justifyContent:'center',borderColor:Colors.Iconwhite,borderWidth:0.7}}>
